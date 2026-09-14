@@ -31,7 +31,23 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { HistorySidebar } from '@/components/HistorySidebar';
 import { useExplanationHistory, HistoryEntry } from '@/hooks/useExplanationHistory';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+import { detectLanguage, getPresetExplanation, heuristicAnalysis } from '@/lib/ai-engine';
+
+const getApiBaseUrl = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined') {
+    const isLocalhostHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    // If running on a deployed host, ignore localhost references
+    if (!isLocalhostHost && envUrl && envUrl.includes('localhost')) {
+      return '';
+    }
+    // Prevent mixed content blocks on HTTPS
+    if (window.location.protocol === 'https:' && envUrl?.startsWith('http://')) {
+      return '';
+    }
+  }
+  return envUrl || '';
+};
 
 /* ── Language map for Monaco syntax highlighting ───────────────────── */
 const LANGUAGE_MAP: Record<string, string> = {
@@ -274,13 +290,14 @@ export default function Home() {
     let active = true;
     const fetchLatestCredits = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/v1/usage`);
+        const baseUrl = getApiBaseUrl();
+        const res = await fetch(`${baseUrl}/v1/usage`);
         if (res.ok && active) {
           const data: CreditInfo = await res.json();
           setCredits(data);
         }
       } catch {
-        // Backend may be starting or offline
+        // Route handler may be initializing
       }
     };
     fetchLatestCredits();
@@ -292,7 +309,8 @@ export default function Home() {
   const handleResetCredits = async () => {
     setIsResettingCredits(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/v1/usage/reset`, { method: 'POST' });
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/v1/usage/reset`, { method: 'POST' });
       if (res.ok) {
         const data: CreditInfo = await res.json();
         setCredits(data);
@@ -342,7 +360,8 @@ export default function Home() {
     setResult(null);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/v1/explain`, {
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/v1/explain`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code }),
@@ -383,11 +402,37 @@ export default function Home() {
         });
       }, 100);
     } catch (err: unknown) {
-      const message =
-        err instanceof Error
-          ? err.message
-          : 'Could not connect to backend. Make sure FastAPI is running on port 8000.';
-      setError(message);
+      console.warn('Network call failed, activating resilient offline heuristic engine:', err);
+      try {
+        const detected = detectLanguage(code.trim());
+        const fallback = getPresetExplanation(code.trim(), detected) || heuristicAnalysis(code.trim());
+        fallback.credits = {
+          limit: 50,
+          used: 0,
+          remaining: 50,
+          isLimitReached: false,
+          quotaExhausted: false,
+          reason: 'Running in resilient offline mode.',
+          mode: 'offline_heuristic',
+          resetAt: 'Midnight UTC',
+        };
+        setResult(fallback);
+        cacheRef.current.set(key, fallback);
+        addEntry(code, fallback.language, fallback.summary, fallback.bugs?.length || 0, fallback);
+        setEditorLang(LANGUAGE_MAP[fallback.language.toLowerCase()] || 'plaintext');
+        setTimeout(() => {
+          document.getElementById('results')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }, 100);
+      } catch (fallbackErr) {
+        const message =
+          err instanceof Error
+            ? err.message
+            : 'Unable to analyze code. Please check your input or connection.';
+        setError(message);
+      }
     } finally {
       setIsLoading(false);
     }
