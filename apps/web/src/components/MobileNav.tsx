@@ -6,10 +6,10 @@ import { Menu, X } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
 const NAV_LINKS = [
-  { href: '#features', label: 'Features' },
-  { href: '#how-it-works', label: 'How It Works' },
-  { href: '#workspace', label: 'Workspace' },
-  { href: '#faq', label: 'FAQ' },
+  { href: '/workspace', label: 'Workspace' },
+  { href: '/features', label: 'Features' },
+  { href: '/how-it-works', label: 'How It Works' },
+  { href: '/faq', label: 'FAQ' },
 ];
 
 export function MobileNav() {
@@ -38,46 +38,49 @@ export function MobileNav() {
         setIsOpen(false);
       }
     };
-    if (isOpen) document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClick);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+    };
   }, [isOpen]);
 
   return (
     <div className="md:hidden" ref={menuRef}>
-      {/* Hamburger button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-        aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+        aria-label="Toggle navigation menu"
         aria-expanded={isOpen}
       >
-        {isOpen ? (
-          <X className="w-5 h-5 text-white" />
-        ) : (
-          <Menu className="w-5 h-5 text-white/80" />
-        )}
+        {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
-      {/* Overlay + Slide-down menu */}
+      {/* Backdrop */}
       {isOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-            style={{ animation: 'fade-in 0.2s ease-out both' }}
-          />
+        <div
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity"
+          onClick={() => setIsOpen(false)}
+          aria-hidden="true"
+        />
+      )}
 
-          {/* Menu panel */}
-          <div
-            className="fixed top-0 left-0 right-0 z-50 px-6 pt-4 pb-6"
-            style={{
-              background: 'rgba(6, 6, 12, 0.97)',
-              borderBottom: '1px solid rgba(255,255,255,0.08)',
-              animation: 'mobile-nav-slide-down 0.3s ease-out both',
-            }}
-          >
-            {/* Header row */}
-            <div className="flex items-center justify-between mb-6">
+      {/* Drawer */}
+      {isOpen && (
+        <div
+          className="fixed top-0 right-0 bottom-0 z-50 w-72 p-6 flex flex-col justify-between"
+          style={{
+            background: '#0d1117',
+            borderLeft: '1px solid rgba(255,255,255,0.08)',
+            boxShadow: '-8px 0 32px rgba(0,0,0,0.6)',
+          }}
+          role="dialog"
+          aria-label="Mobile Navigation"
+        >
+          <div>
+            {/* Header */}
+            <div className="flex items-center justify-between pb-6 mb-6 border-b border-white/10">
               <Link
                 href="/"
                 className="flex items-center gap-2.5"
@@ -98,7 +101,7 @@ export function MobileNav() {
             {/* Nav links */}
             <nav className="flex flex-col gap-1">
               {NAV_LINKS.map((link, i) => (
-                <a
+                <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
@@ -107,9 +110,9 @@ export function MobileNav() {
                     animation: `fade-in 0.3s ${80 + i * 50}ms ease-out both`,
                   }}
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/60" />
                   {link.label}
-                </a>
+                </Link>
               ))}
             </nav>
 
@@ -121,16 +124,16 @@ export function MobileNav() {
                 animation: 'fade-in 0.3s 300ms ease-out both',
               }}
             >
-              <a
-                href="#workspace"
+              <Link
+                href="/workspace"
                 onClick={() => setIsOpen(false)}
-                className="btn-primary w-full justify-center text-sm py-3"
+                className="btn-primary w-full justify-center text-sm py-3 no-underline"
               >
-                Launch Workspace
-              </a>
+                Launch Studio
+              </Link>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
