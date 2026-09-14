@@ -107,7 +107,7 @@ void main() {
     c += glowCore / length(vec2(sin(i.x + t), cos(i.y + t)));
   }
 
-  c /= 6.0;
+  c /= 4.0;
 
   float intensity = max(c - uBlackPoint, 0.0) * uBrightness;
 
@@ -145,7 +145,7 @@ void main() {
     }
     fragColor = vec4(mix(uBackgroundColor, lightCol, clamp(coverage, 0.0, 0.92)), 1.0);
   } else {
-    fragColor = vec4(col * a, a);
+    fragColor = vec4(col, a);
   }
 }
 `;
@@ -187,7 +187,7 @@ export const MoltenMetal: React.FC<MoltenMetalProps> = ({
       renderer = new Renderer({
         webgl: 2,
         alpha: true,
-        premultipliedAlpha: true,
+        premultipliedAlpha: false,
         antialias: false,
         dpr: Math.min(window.devicePixelRatio || 1, 2),
       });
@@ -260,17 +260,20 @@ export const MoltenMetal: React.FC<MoltenMetalProps> = ({
     const currentMouse = [0.5, 0.5];
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (!container) return;
       const rect = container.getBoundingClientRect();
-      targetMouse[0] = (e.clientX - rect.left) / rect.width;
-      targetMouse[1] = 1.0 - (e.clientY - rect.top) / rect.height;
+      if (rect.width > 0 && rect.height > 0) {
+        targetMouse[0] = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        targetMouse[1] = Math.max(0, Math.min(1, 1.0 - (e.clientY - rect.top) / rect.height));
+      }
     };
     const handleMouseLeave = () => {
       targetMouse[0] = 0.5;
       targetMouse[1] = 0.5;
     };
 
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
 
     let raf = 0;
     let isVisible = true;
@@ -319,8 +322,8 @@ export const MoltenMetal: React.FC<MoltenMetalProps> = ({
       ro.disconnect();
       io.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
       ctxMap.delete(container);
       if (canvas.parentNode === container) container.removeChild(canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();

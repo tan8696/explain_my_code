@@ -24,7 +24,6 @@ import {
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import GradientWaves from '@/components/GradientWaves';
 import { ScrollReveal } from '@/components/ScrollReveal';
 
 const MoltenMetal = dynamic(() => import('@/components/MoltenMetal'), {
@@ -98,16 +97,45 @@ export default function HomePage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex flex-col justify-between selection:bg-cyan-500/20 selection:text-cyan-200 relative overflow-hidden">
-      {/* Dynamic Background Ambient Waves */}
-      <div className="fixed inset-0 pointer-events-none opacity-40 -z-10">
-        <GradientWaves />
+    <div className="min-h-screen flex flex-col justify-between selection:bg-cyan-500/20 selection:text-cyan-200 relative overflow-hidden bg-[#06060c]">
+      {/* Fullscreen MoltenMetal WebGL Dynamic Caustic Background */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <MoltenMetal
+          key={`bg-metal-${activePresetIndex}`}
+          color1={currentPreset.color1}
+          color2={currentPreset.color2}
+          color3={currentPreset.color3}
+          speed={currentPreset.speed}
+          scale={3.2}
+          detail={4}
+          glow={2.2}
+          coreSize={0.12}
+          swirl={1.2}
+          fold={-0.2}
+          blackPoint={0.01}
+          brightness={2.2}
+          colorMode={currentPreset.mode}
+          grain={true}
+          grainIntensity={0.04}
+          mouseInteraction={true}
+          mouseStrength={0.4}
+          opacity={0.85}
+        />
+        {/* Soft radial overlay for perfect text contrast and reading comfort */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse 90% 70% at 50% 30%, rgba(6, 6, 12, 0.4) 0%, rgba(6, 6, 12, 0.88) 100%)',
+          }}
+        />
       </div>
 
-      <Navbar />
+      <div className="relative z-10 flex flex-col justify-between min-h-screen">
+        <Navbar />
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-16 pb-24">
-        {/* Hero Section */}
+        <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-16 pb-24">
+          {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-16 pt-4 sm:pt-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-cyan-300 font-mono mb-6 shadow-inner">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
@@ -436,7 +464,8 @@ export default function HomePage() {
         </div>
       </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </div>
   );
 }
