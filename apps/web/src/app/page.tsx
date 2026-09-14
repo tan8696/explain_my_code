@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Sparkles,
@@ -18,11 +18,18 @@ import {
   ChevronRight,
   Lock,
   Flame,
+  Share2,
 } from 'lucide-react';
 import { SourceEditor } from '@/components/editor/SourceEditor';
 import { ExplanationPanel, ExplanationData, CreditInfo } from '@/components/ExplanationPanel';
 import { LoadingState } from '@/components/LoadingState';
 import GradientWaves from '@/components/GradientWaves';
+import { EditorErrorBoundary } from '@/components/EditorErrorBoundary';
+import { ScrollReveal } from '@/components/ScrollReveal';
+import { MobileNav } from '@/components/MobileNav';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { HistorySidebar } from '@/components/HistorySidebar';
+import { useExplanationHistory, HistoryEntry } from '@/hooks/useExplanationHistory';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -242,6 +249,26 @@ export default function Home() {
   const [editorLang, setEditorLang] = useState('python');
   const [credits, setCredits] = useState<CreditInfo | null>(null);
   const [isResettingCredits, setIsResettingCredits] = useState(false);
+  const [shareMsg, setShareMsg] = useState<string | null>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
+
+  // History hook
+  const { history, addEntry, removeEntry, clearHistory } = useExplanationHistory();
+
+  // API response cache (LRU in memory)
+  const cacheRef = useRef<Map<string, ExplanationData>>(new Map());
+  const MAX_CACHE = 30;
+
+  const getCacheKey = (codeStr: string) => {
+    // Simple hash for cache key
+    let hash = 0;
+    for (let i = 0; i < codeStr.length; i++) {
+      const chr = codeStr.charCodeAt(i);
+      hash = ((hash << 5) - hash) + chr;
+      hash |= 0;
+    }
+    return `h_${hash}`;
+  };
 
   useEffect(() => {
     let active = true;
@@ -295,6 +322,21 @@ export default function Home() {
   const handleExplain = useCallback(async () => {
     if (!code.trim()) return;
 
+    // Check cache first
+    const key = getCacheKey(code.trim());
+    const cached = cacheRef.current.get(key);
+    if (cached) {
+      setResult(cached);
+      setError(null);
+      if (cached.credits) setCredits(cached.credits);
+      const detected = cached.language.toLowerCase();
+      setEditorLang(LANGUAGE_MAP[detected] || 'plaintext');
+      setTimeout(() => {
+        document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setResult(null);
@@ -313,6 +355,16 @@ export default function Home() {
 
       const data: ExplanationData = await res.json();
       setResult(data);
+
+      // Cache the response
+      cacheRef.current.set(key, data);
+      if (cacheRef.current.size > MAX_CACHE) {
+        const firstKey = cacheRef.current.keys().next().value;
+        if (firstKey) cacheRef.current.delete(firstKey);
+      }
+
+      // Save to history
+      addEntry(code, data.language, data.summary, data.bugs?.length || 0, data);
 
       if (data.credits) {
         setCredits(data.credits);
@@ -339,10 +391,77 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
+  }, [code, addEntry]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl/Cmd + Enter → Explain
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        handleExplain();
+      }
+      // Ctrl/Cmd + K → Focus editor
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        editorRef.current?.querySelector('textarea')?.focus();
+      }
+      // Escape → Clear results
+      if (e.key === 'Escape' && result) {
+        setResult(null);
+        setError(null);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleExplain, result]);
+
+  // Share handler
+  const handleShare = useCallback(async () => {
+    try {
+      const encoded = btoa(encodeURIComponent(code));
+      const shareUrl = `${window.location.origin}?code=${encoded}`;
+      await navigator.clipboard.writeText(shareUrl);
+      setShareMsg('Link copied!');
+      setTimeout(() => setShareMsg(null), 2500);
+    } catch {
+      setShareMsg('Copy failed');
+      setTimeout(() => setShareMsg(null), 2500);
+    }
   }, [code]);
 
+  // Load shared code from URL on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sharedCode = params.get('code');
+    if (sharedCode) {
+      try {
+        const decoded = decodeURIComponent(atob(sharedCode));
+        setCode(decoded);
+        setActivePreset('');
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+      } catch {
+        // Invalid shared code, ignore
+      }
+    }
+  }, []);
+
+  // Handle history entry selection
+  const handleHistorySelect = useCallback((entry: HistoryEntry) => {
+    setCode(entry.code);
+    setActivePreset('');
+    setResult(entry.result as ExplanationData);
+    setError(null);
+    const detected = entry.language.toLowerCase();
+    setEditorLang(LANGUAGE_MAP[detected] || 'plaintext');
+    setTimeout(() => {
+      document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }, []);
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#06060c] text-[var(--text-primary)]">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-deep)] text-[var(--text-primary)]">
       {/* ── Sticky Top Navigation ──────────────────────────────────── */}
       <header
         className="sticky top-0 z-50 px-6 py-3.5 backdrop-blur-xl border-b transition-colors"
@@ -376,25 +495,26 @@ export default function Home() {
 
           {/* Nav links */}
           <nav className="hidden md:flex items-center gap-6 text-xs text-[var(--text-secondary)]">
-            <a href="#features" className="hover:text-white transition-colors">
+            <a href="#features" className="hover:text-[var(--text-primary)] transition-colors">
               Features
             </a>
-            <a href="#how-it-works" className="hover:text-white transition-colors">
+            <a href="#how-it-works" className="hover:text-[var(--text-primary)] transition-colors">
               How It Works
             </a>
-            <a href="#workspace" className="hover:text-white transition-colors">
+            <a href="#workspace" className="hover:text-[var(--text-primary)] transition-colors">
               Workspace
             </a>
-            <a href="#faq" className="hover:text-white transition-colors">
+            <a href="#faq" className="hover:text-[var(--text-primary)] transition-colors">
               FAQ
             </a>
           </nav>
 
-          <div className="flex items-center gap-3">
-            {/* AI Free Tier Credit Tracker */}
+          <div className="flex items-center gap-2">
+            {/* AI Free Tier Credit Tracker — skeleton while loading */}
+            {!credits && <div className="credit-skeleton hidden sm:block" />}
             {credits && (
               <div
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all shadow-sm"
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs transition-all shadow-sm"
                 style={{
                   background: credits.isLimitReached
                     ? 'rgba(239, 68, 68, 0.12)'
@@ -433,8 +553,9 @@ export default function Home() {
                 <button
                   onClick={handleResetCredits}
                   disabled={isResettingCredits}
-                  className="ml-1 p-0.5 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer"
+                  className="ml-1 p-0.5 rounded hover:bg-white/10 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
                   title="Reset daily credits (Dev/Testing)"
+                  aria-label="Reset daily credits"
                 >
                   <RefreshCw
                     className={`w-3 h-3 ${isResettingCredits ? 'animate-spin text-blue-400' : ''}`}
@@ -443,13 +564,19 @@ export default function Home() {
               </div>
             )}
 
+            {/* Theme toggle */}
+            <ThemeToggle />
+
             <a
               href="#workspace"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all border border-white/15 cursor-pointer shadow-sm"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-[var(--white-subtle)] hover:bg-[rgba(255,255,255,0.15)] text-[var(--text-primary)] transition-all border border-[var(--border-subtle)] cursor-pointer shadow-sm"
             >
               <span>Try Explainer</span>
               <ChevronRight className="w-3 h-3" />
             </a>
+
+            {/* Mobile hamburger */}
+            <MobileNav />
           </div>
         </div>
       </header>
@@ -583,6 +710,7 @@ export default function Home() {
       </section>
 
       {/* ── Features Bento Section ─────────────────────────────────── */}
+      <ScrollReveal>
       <section id="features" className="scroll-mt-20 py-20 px-6 max-w-6xl mx-auto w-full">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs font-semibold uppercase tracking-widest text-pink-400">
@@ -700,9 +828,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* ── How It Works Section ───────────────────────────────────── */}
-      <section id="how-it-works" className="scroll-mt-20 py-16 px-6 max-w-5xl mx-auto w-full border-t border-white/5">
+      <ScrollReveal delay={100}>
+      <section id="how-it-works" className="scroll-mt-20 py-16 px-6 max-w-5xl mx-auto w-full border-t border-[var(--border-subtle)]">
         <div className="text-center max-w-xl mx-auto mb-12">
           <span className="text-xs font-semibold uppercase tracking-widest text-sky-400">
             Workflow
@@ -744,6 +874,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* ── Interactive Workspace Section ──────────────────────────── */}
       <section id="workspace" className="scroll-mt-20 pt-16 pb-12 px-4 sm:px-6 max-w-6xl mx-auto w-full">
@@ -851,15 +982,17 @@ export default function Home() {
           </div>
 
           {/* Code Editor */}
-          <div className="h-[340px] sm:h-[400px]">
-            <SourceEditor
-              code={code}
-              onChange={(val) => {
-                setCode(val || '');
-                if (activePreset) setActivePreset('');
-              }}
-              language={editorLang}
-            />
+          <div ref={editorRef} className="h-[min(340px,50vh)] sm:h-[400px]">
+            <EditorErrorBoundary>
+              <SourceEditor
+                code={code}
+                onChange={(val) => {
+                  setCode(val || '');
+                  if (activePreset) setActivePreset('');
+                }}
+                language={editorLang}
+              />
+            </EditorErrorBoundary>
           </div>
 
           {/* Bottom Control Bar */}
@@ -885,18 +1018,34 @@ export default function Home() {
               )}
             </div>
 
-            <button
-              className="btn-primary cursor-pointer text-sm font-semibold"
-              onClick={handleExplain}
-              disabled={isLoading || !code.trim()}
-            >
-              <Sparkles className="w-4 h-4 text-purple-600" />
-              {isLoading
-                ? 'Analyzing…'
-                : credits?.isLimitReached
-                ? 'Explain (Quota Guard)'
-                : 'Explain This Code'}
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Share button */}
+              {code.trim() && (
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--white-subtle)] hover:bg-[rgba(255,255,255,0.1)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
+                  title="Copy shareable link to clipboard"
+                  aria-label="Share code as link"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">{shareMsg || 'Share'}</span>
+                </button>
+              )}
+
+              <button
+                className="btn-primary cursor-pointer text-sm font-semibold"
+                onClick={handleExplain}
+                disabled={isLoading || !code.trim()}
+                title="Ctrl+Enter"
+              >
+                <Sparkles className="w-4 h-4" />
+                {isLoading
+                  ? 'Analyzing…'
+                  : credits?.isLimitReached
+                  ? 'Explain (Quota Guard)'
+                  : 'Explain This Code'}
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -938,7 +1087,8 @@ export default function Home() {
       </section>
 
       {/* ── FAQ Section ────────────────────────────────────────────── */}
-      <section id="faq" className="scroll-mt-20 py-20 px-6 max-w-4xl mx-auto w-full border-t border-white/5">
+      <ScrollReveal delay={50}>
+      <section id="faq" className="scroll-mt-20 py-20 px-6 max-w-4xl mx-auto w-full border-t border-[var(--border-subtle)]">
         <div className="text-center max-w-xl mx-auto mb-12">
           <span className="text-xs font-semibold uppercase tracking-widest text-purple-400">
             Answers & Clarity
@@ -990,6 +1140,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* ── Footer ─────────────────────────────────────────────────── */}
       <footer
@@ -1000,24 +1151,24 @@ export default function Home() {
         }}
       >
         <div className="flex items-center gap-2">
-          <Code2 className="w-4 h-4 text-white" />
-          <span>Explain My Code · Built with Next.js 16, FastAPI & Gemini 2.5 Flash</span>
+          <Code2 className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />
+          <span>© {new Date().getFullYear()} Explain My Code · Built with Next.js 16, FastAPI & Gemini 2.5 Flash</span>
         </div>
 
         <div className="flex items-center gap-4 flex-wrap justify-center">
-          <Link href="/privacy" className="hover:text-white transition-colors">
+          <Link href="/privacy" className="hover:text-[var(--text-primary)] transition-colors">
             Privacy Policy
           </Link>
           <span>·</span>
-          <Link href="/terms" className="hover:text-white transition-colors">
+          <Link href="/terms" className="hover:text-[var(--text-primary)] transition-colors">
             Terms of Service
           </Link>
           <span>·</span>
           <a
-            href="https://github.com"
+            href="https://github.com/tan8696/explain_my_code"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-white transition-colors"
+            className="hover:text-[var(--text-primary)] transition-colors"
           >
             GitHub
           </a>
@@ -1028,6 +1179,14 @@ export default function Home() {
           </span>
         </div>
       </footer>
+
+      {/* ── History Sidebar ─────────────────────────────────────────── */}
+      <HistorySidebar
+        history={history}
+        onSelect={handleHistorySelect}
+        onRemove={removeEntry}
+        onClear={clearHistory}
+      />
     </div>
   );
 }

@@ -224,6 +224,7 @@ export function ExplanationPanel({ data }: ExplanationPanelProps) {
             onClick={handleCopy}
             className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.08)] text-[var(--text-secondary)] hover:text-white transition-all cursor-pointer"
             title="Copy full explanation as Markdown"
+            aria-label="Copy explanation as Markdown"
           >
             {copied ? (
               <>
@@ -242,6 +243,7 @@ export function ExplanationPanel({ data }: ExplanationPanelProps) {
             onClick={handleDownload}
             className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.08)] text-[var(--text-secondary)] hover:text-white transition-all cursor-pointer"
             title="Download explanation markdown report"
+            aria-label="Download markdown report"
           >
             <Download className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Export</span>
@@ -250,10 +252,14 @@ export function ExplanationPanel({ data }: ExplanationPanelProps) {
       </div>
 
       {/* Tab bar */}
-      <div className="tab-bar overflow-x-auto">
+      <div className="tab-bar overflow-x-auto" role="tablist" aria-label="Explanation sections">
         {TABS.map((tab) => (
           <button
             key={tab.id}
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            aria-controls={`tabpanel-${tab.id}`}
+            id={`tab-${tab.id}`}
             className={`tab-btn flex items-center gap-2 cursor-pointer ${activeTab === tab.id ? 'active' : ''}`}
             onClick={() => setActiveTab(tab.id)}
           >
@@ -276,7 +282,13 @@ export function ExplanationPanel({ data }: ExplanationPanelProps) {
       </div>
 
       {/* Tab content */}
-      <div className="animate-fade-in" key={activeTab}>
+      <div
+        className="tab-content-enter"
+        key={activeTab}
+        role="tabpanel"
+        id={`tabpanel-${activeTab}`}
+        aria-labelledby={`tab-${activeTab}`}
+      >
         {activeTab === 'summary' && <SummaryTab data={data} />}
         {activeTab === 'lines' && <LinesTab lines={data.lineByLine} />}
         {activeTab === 'logic' && <LogicTab logic={data.logic} />}

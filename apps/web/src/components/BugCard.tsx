@@ -150,9 +150,35 @@ export function BugCard({ line, severity, description, fix }: BugCardProps) {
 
             {code && (
               <div className="relative group mt-1">
-                <pre className="p-2.5 rounded bg-[#070913] border border-white/10 font-mono text-[11.5px] text-emerald-300 overflow-x-auto whitespace-pre leading-relaxed">
-                  <code>{code}</code>
-                </pre>
+                {/* Diff-style view */}
+                <div
+                  className="rounded overflow-hidden border border-white/10 font-mono text-[11.5px] leading-relaxed"
+                  style={{ background: '#070913' }}
+                >
+                  {/* Old line (from description) */}
+                  <div
+                    className="px-3 py-1.5 flex items-center gap-2"
+                    style={{
+                      background: 'rgba(248, 113, 113, 0.08)',
+                      borderBottom: '1px solid rgba(255,255,255,0.04)',
+                    }}
+                  >
+                    <span className="text-red-400/80 select-none font-bold shrink-0">−</span>
+                    <code className="text-red-300/90 overflow-x-auto whitespace-pre">
+                      {description.length < 120
+                        ? description.split('.')[0]
+                        : '// Bug on this line'}
+                    </code>
+                  </div>
+                  {/* New line (the fix) */}
+                  <div
+                    className="px-3 py-1.5 flex items-center gap-2"
+                    style={{ background: 'rgba(52, 211, 153, 0.06)' }}
+                  >
+                    <span className="text-emerald-400/80 select-none font-bold shrink-0">+</span>
+                    <code className="text-emerald-300 overflow-x-auto whitespace-pre">{code}</code>
+                  </div>
+                </div>
               </div>
             )}
           </div>
