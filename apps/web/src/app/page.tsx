@@ -145,7 +145,7 @@ export default function HomePage() {
                 backgroundImage: 'linear-gradient(135deg, #38bdf8 0%, #a78bfa 50%, #f472b6 100%)',
               }}
             >
-              Plain English
+              Simple English
             </span>
           </h1>
 
@@ -239,7 +239,7 @@ export default function HomePage() {
                 </div>
 
                 <h4 className="text-sm font-semibold text-white mb-1.5">
-                  Plain-English Explanation:
+                  Simple English Explanation:
                 </h4>
                 <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-4">
                   This program sets up a division calculation between two numbers, but contains a fatal
@@ -269,7 +269,7 @@ export default function HomePage() {
               </h2>
               <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
                 Move your cursor across the fluid field below. Liquid caustics fold and swirl dynamically,
-                mirroring how raw logic crystallizes into plain English understanding.
+                mirroring how raw logic crystallizes into simple English understanding.
               </p>
             </div>
 

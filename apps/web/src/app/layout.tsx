@@ -23,11 +23,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://explainmycode.dev"),
   title: {
-    default: "Explain My Code — Understand Any Code in Plain English",
+    default: "Explain My Code — Understand Any Code in Simple English",
     template: "%s | Explain My Code",
   },
   description:
-    "Paste code in Python, JavaScript, TypeScript, C++, Rust, Go, SQL or any language. Get instant plain-English line-by-line breakdowns, narrative logic, and bug detection powered by AI.",
+    "Paste code in Python, JavaScript, TypeScript, C++, Rust, Go, SQL or any language. Get instant simple English line-by-line breakdowns, narrative logic, and bug detection powered by AI.",
   keywords: [
     "code explainer",
     "ai code tutor",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     "code bug detector",
     "python explainer",
     "javascript explainer",
-    "plain english code",
+    "simple english code",
     "gemini code analysis",
   ],
   authors: [{ name: "Explain My Code" }],
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://explainmycode.dev",
-    title: "Explain My Code — Understand Any Code in Plain English",
+    title: "Explain My Code — Understand Any Code in Simple English",
     description:
       "Instant line-by-line breakdowns, narrative logic, and bug detection for any programming language with zero jargon.",
     siteName: "Explain My Code",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Explain My Code — Understand Any Code in Plain English",
+    title: "Explain My Code — Understand Any Code in Simple English",
     description:
       "Instant line-by-line breakdowns, narrative logic, and bug detection for any programming language with zero jargon.",
     images: ["/og-image.png"],

@@ -110,7 +110,7 @@ export default function NotFound() {
             <div className="space-y-1">
               <p>Available commands:</p>
               <p className="text-[var(--text-muted)]">  cd /         - Navigate back to home workspace</p>
-              <p className="text-[var(--text-muted)]">  explain 404  - Plain-English breakdown of this error</p>
+              <p className="text-[var(--text-muted)]">  explain 404  - Simple English breakdown of this error</p>
               <p className="text-[var(--text-muted)]">  ls routes    - List registered valid routes</p>
               <p className="text-[var(--text-muted)]">  ping router  - Test routing table status</p>
               <p className="text-[var(--text-muted)]">  clear        - Clear terminal log</p>
@@ -302,7 +302,7 @@ export default function NotFound() {
                         : 'bg-transparent text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
                     }`}
                   >
-                    Plain English
+                    Simple English
                   </button>
                   <button
                     onClick={() => setActiveTab('terminal')}
@@ -368,7 +368,7 @@ export default function NotFound() {
                   <div className="text-[var(--text-muted)]">{'}'}</div>
                 </div>
 
-                {/* Plain-English Breakdown Cards */}
+                {/* Simple English Breakdown Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                   <div
                     className="p-3 rounded-xl border border-[var(--border-subtle)]"
@@ -549,7 +549,7 @@ export default function NotFound() {
                     JS Array Operations
                   </div>
                   <p className="text-xs text-[var(--text-secondary)] m-0 leading-relaxed">
-                    Explore modern JavaScript functional array mapping & filtering explained in plain English.
+                    Explore modern JavaScript functional array mapping & filtering explained in simple English.
                   </p>
                 </div>
                 <div className="mt-3 text-xs text-[var(--text-secondary)] group-hover:text-white font-medium flex items-center gap-1">
@@ -666,7 +666,7 @@ export default function NotFound() {
       >
         <div className="flex items-center gap-2">
           <BrandLogo size={18} />
-          <span>Explain My Code · Universal Plain-English Code Tutor</span>
+          <span>Explain My Code · Universal Simple English Code Tutor</span>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>

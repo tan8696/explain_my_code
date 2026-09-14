@@ -1,17 +1,17 @@
 # Explain My Code (v2.0)
 
-A universal AI-powered code tutor that transforms complex source code into plain-English stories. Built with **Next.js 16**, **FastAPI**, **Google Gemini 2.5 Flash**, and a **Free-Tier Protection Guard**.
+A universal AI-powered code tutor that transforms complex source code into simple English stories. Built with **Next.js 16**, **FastAPI**, **Google Gemini 2.5 Flash**, and a **Free-Tier Protection Guard**.
 
 ---
 
 ## Features
 
 - 🌐 **Universal Language Support**: Understand Python, JavaScript, TypeScript, C++, Rust, Go, Java, SQL, HTML, and more.
-- 📖 **Plain-English Explanations**: Jargon-free breakdowns designed for beginners and visual learners.
+- 📖 **Simple English Explanations**: Jargon-free breakdowns designed for beginners and visual learners.
 - 📑 **Line-by-Line Breakdown**: Explains the purpose and mechanics of every single line of code.
 - 🔀 **Narrative Logic Flow**: Step-by-step story of how data transforms through execution.
 - ⚠️ **Bug & Security Scanner**: Detects runtime crashes, division by zero, mutable default arguments, and style warnings with clear fixes.
-- 💡 **Core Programming Concepts**: Defines programming concepts (Recursion, Filtering, Data Structures) in plain English.
+- 💡 **Core Programming Concepts**: Defines programming concepts (Recursion, Filtering, Data Structures) in simple English.
 - 🛡️ **Free-Tier Protection Guard**:
   - Daily credit quota manager (default: 50 requests/day, configurable via `AI_DAILY_CREDIT_LIMIT`).
   - 15 RPM sliding-window rate limiter matching Gemini Free Tier policies.

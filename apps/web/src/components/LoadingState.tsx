@@ -7,7 +7,7 @@ const ANALYSIS_STEPS = [
   { label: 'Detecting language & parsing syntax tree', icon: Code2 },
   { label: 'Tracing step-by-step narrative logic', icon: Cpu },
   { label: 'Scanning for syntax errors & logical bugs', icon: Search },
-  { label: 'Synthesizing plain-English beginner concepts', icon: Sparkles },
+  { label: 'Synthesizing simple English beginner concepts', icon: Sparkles },
 ];
 
 export function LoadingState() {

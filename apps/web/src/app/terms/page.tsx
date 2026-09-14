@@ -94,7 +94,7 @@ export default function TermsPage() {
               <h2>3. Educational Use Disclaimer</h2>
             </div>
             <p>
-              Explain My Code utilizes advanced large language models (Google Gemini 2.5 Flash) and heuristic static analysis to generate plain-English explanations, narrative logic, and bug reports.
+              Explain My Code utilizes advanced large language models (Google Gemini 2.5 Flash) and heuristic static analysis to generate simple English explanations, narrative logic, and bug reports.
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm">
               <li>Explanations are intended for educational and reference assistance only.</li>
@@ -151,7 +151,7 @@ export default function TermsPage() {
       >
         <div className="flex items-center gap-2">
           <BrandLogo size={18} />
-          <span>Explain My Code · Plain-English Code Tutor</span>
+          <span>Explain My Code · Simple English Code Tutor</span>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>

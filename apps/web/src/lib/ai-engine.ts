@@ -146,7 +146,7 @@ You will receive a snippet of source code. Your job:
 
 1. **Detect the language** — return the language name (e.g. "Python", "JavaScript", "Java", "C++", "Go", "Rust", "HTML", "CSS", "SQL", "Ruby", "PHP", "TypeScript", "Kotlin", "Swift", "C#", "Shell", "R", etc.)
 
-2. **Summary** — 2-3 sentences explaining what this code does in plain English. Imagine explaining it to a 10-year-old. No jargon.
+2. **Summary** — 2-3 sentences explaining what this code does in simple English. Imagine explaining it to a 10-year-old. No jargon.
 
 3. **Line-by-line** — For EVERY line of the code, give:
    - lineNumber (1-indexed)

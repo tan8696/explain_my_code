@@ -18,7 +18,7 @@ export function Footer() {
         <div>
           <span className="font-medium text-[var(--text-primary)]">Explain My Code</span>
           <span className="mx-1.5">·</span>
-          <span>© {new Date().getFullYear()} · Universal Plain-English Code Tutor</span>
+          <span>© {new Date().getFullYear()} · Universal Simple English Code Tutor</span>
         </div>
       </div>
 

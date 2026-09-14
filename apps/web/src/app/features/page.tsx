@@ -28,7 +28,7 @@ const FEATURES = [
   },
   {
     icon: <BookOpen className="w-6 h-6 text-violet-400" />,
-    title: 'Plain-English Deconstruction',
+    title: 'Simple English Deconstruction',
     desc: 'Transforms dense code into approachable stories tailored for beginners. Uses relatable analogies like shopping lists and toy boxes rather than intimidating academic jargon.',
     tag: 'Beginner-Friendly',
   },
@@ -60,7 +60,7 @@ const FEATURES = [
 
 const COMPARISON = [
   {
-    feature: 'Beginner-friendly plain English',
+    feature: 'Beginner-friendly simple English',
     us: true,
     rawChat: 'Hit or miss',
     docs: false,

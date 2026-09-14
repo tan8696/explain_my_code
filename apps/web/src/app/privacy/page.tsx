@@ -191,7 +191,7 @@ export default function PrivacyPage() {
       >
         <div className="flex items-center gap-2">
           <BrandLogo size={18} />
-          <span>Explain My Code · Plain-English Code Tutor</span>
+          <span>Explain My Code · Simple English Code Tutor</span>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>

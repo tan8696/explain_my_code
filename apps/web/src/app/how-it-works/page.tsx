@@ -39,7 +39,7 @@ const STEPS = [
   {
     num: '04',
     title: '6-Layer Report Synthesis',
-    desc: 'The output is parsed into six distinct pedagogical perspectives: a plain English summary, line-by-line mechanical annotations, a narrative execution story, a bug/security scanner, computer science concepts, and simulated terminal output.',
+    desc: 'The output is parsed into six distinct pedagogical perspectives: a simple English summary, line-by-line mechanical annotations, a narrative execution story, a bug/security scanner, computer science concepts, and simulated terminal output.',
     badge: 'Multi-Perspective',
   },
 ];
