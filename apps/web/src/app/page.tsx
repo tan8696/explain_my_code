@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import {
   Sparkles,
   ArrowRight,
@@ -17,14 +18,68 @@ import {
   Cpu,
   Layers,
   HelpCircle,
+  Palette,
+  Flame,
+  MousePointerClick,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import GradientWaves from '@/components/GradientWaves';
 import { ScrollReveal } from '@/components/ScrollReveal';
 
+const MoltenMetal = dynamic(() => import('@/components/MoltenMetal'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[500px] flex items-center justify-center bg-[#070913] text-cyan-400/70 font-mono text-xs">
+      <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping mr-2.5" />
+      Initializing WebGL caustics…
+    </div>
+  ),
+});
+
+const METAL_PRESETS = [
+  {
+    name: 'Cosmic Neon',
+    color1: '#5227FF',
+    color2: '#FF9FFC',
+    color3: '#FFFFFF',
+    mode: 'molten' as const,
+    speed: 0.35,
+    glow: 1.6,
+  },
+  {
+    name: 'Quantum Cyan',
+    color1: '#0c4a6e',
+    color2: '#38bdf8',
+    color3: '#ffffff',
+    mode: 'frost' as const,
+    speed: 0.4,
+    glow: 1.8,
+  },
+  {
+    name: 'Solar Amber',
+    color1: '#7c2d12',
+    color2: '#fb923c',
+    color3: '#fef08a',
+    mode: 'ember' as const,
+    speed: 0.3,
+    glow: 1.7,
+  },
+  {
+    name: 'Emerald Matrix',
+    color1: '#064e3b',
+    color2: '#34d399',
+    color3: '#ecfdf5',
+    mode: 'molten' as const,
+    speed: 0.35,
+    glow: 1.5,
+  },
+];
+
 export default function HomePage() {
   const router = useRouter();
+  const [activePresetIndex, setActivePresetIndex] = useState(0);
+  const currentPreset = METAL_PRESETS[activePresetIndex];
 
   // Automatic hash redirection for backward compatibility (e.g. #workspace -> /workspace)
   useEffect(() => {
@@ -172,6 +227,131 @@ export default function HomePage() {
                 <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-200">
                   <div className="font-semibold text-rose-300 mb-0.5">⚠️ ZeroDivisionError on Line 3</div>
                   <div>Add a defensive check: <code className="bg-black/40 px-1 py-0.5 rounded text-rose-100">if b == 0: return None</code></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Interactive WebGL MoltenMetal Showcase */}
+        <ScrollReveal>
+          <div className="mb-24">
+            <div className="text-center max-w-2xl mx-auto mb-8">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-xs text-cyan-300 font-mono mb-3">
+                <MousePointerClick className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Interactive WebGL 2 Caustics · React Bits</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-white mb-3">
+                The Fluid Dynamics of Clean Code
+              </h2>
+              <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
+                Move your cursor across the fluid field below. Liquid caustics fold and swirl dynamically,
+                mirroring how raw logic crystallizes into plain English understanding.
+              </p>
+            </div>
+
+            <div className="glass-card rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#06060c]">
+              {/* Showcase Top Control Bar */}
+              <div className="px-5 py-3.5 bg-white/[0.02] border-b border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs font-mono text-white font-medium">
+                      Caustic Shader Engine
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono hidden md:inline">
+                    · 8-fold domain warp · WebGL 2.0
+                  </span>
+                </div>
+
+                {/* Palette Switcher */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                  <span className="text-xs font-mono text-[var(--text-muted)] mr-1 flex items-center gap-1 shrink-0">
+                    <Palette className="w-3 h-3 text-cyan-400" />
+                    Palette:
+                  </span>
+                  {METAL_PRESETS.map((preset, idx) => (
+                    <button
+                      key={preset.name}
+                      onClick={() => setActivePresetIndex(idx)}
+                      className="text-xs px-2.5 py-1 rounded-lg transition-all duration-200 shrink-0 cursor-pointer font-medium"
+                      style={{
+                        background:
+                          activePresetIndex === idx
+                            ? 'rgba(255, 255, 255, 0.15)'
+                            : 'rgba(255, 255, 255, 0.03)',
+                        border:
+                          activePresetIndex === idx
+                            ? '1px solid rgba(255, 255, 255, 0.35)'
+                            : '1px solid var(--border-subtle)',
+                        color: activePresetIndex === idx ? '#ffffff' : 'var(--text-secondary)',
+                      }}
+                    >
+                      {preset.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* MoltenMetal WebGL Container */}
+              <div
+                style={{ width: '100%', height: '560px', position: 'relative' }}
+                className="overflow-hidden bg-[#06060c]"
+              >
+                <MoltenMetal
+                  key={`metal-${activePresetIndex}`}
+                  color1={currentPreset.color1}
+                  color2={currentPreset.color2}
+                  color3={currentPreset.color3}
+                  speed={currentPreset.speed}
+                  scale={4}
+                  detail={3}
+                  glow={currentPreset.glow}
+                  coreSize={0.1}
+                  swirl={1}
+                  fold={-0.2}
+                  blackPoint={0.05}
+                  brightness={1.3}
+                  colorMode={currentPreset.mode}
+                  grain={true}
+                  grainIntensity={0.05}
+                  mouseInteraction={true}
+                  mouseStrength={0.35}
+                  opacity={1.0}
+                />
+
+                {/* Floating HUD Badges inside Canvas */}
+                <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-5 sm:p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="backdrop-blur-md bg-black/40 border border-white/10 px-3 py-1.5 rounded-xl text-[11px] font-mono text-cyan-300 shadow-lg inline-flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                      <span>Hover / Drag mouse across field</span>
+                    </div>
+
+                    <div className="hidden sm:inline-flex backdrop-blur-md bg-black/40 border border-white/10 px-3 py-1.5 rounded-xl text-[11px] font-mono text-[var(--text-secondary)] shadow-lg">
+                      <span>Caustic Mode: {currentPreset.mode.toUpperCase()}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="backdrop-blur-md bg-black/40 border border-white/10 px-3 py-1.5 rounded-xl text-[11px] text-[var(--text-secondary)] shadow-lg max-w-sm">
+                      <span className="text-white font-medium">Domain Folding Active:</span> Real-time
+                      mathematical caustic calculation rendering liquid filaments.
+                    </div>
+
+                    <Link
+                      href="/workspace"
+                      className="pointer-events-auto btn-primary text-xs py-2.5 px-4 shadow-xl inline-flex items-center gap-2 no-underline self-start sm:self-auto"
+                      style={{
+                        boxShadow: '0 0 20px rgba(56, 189, 248, 0.3)',
+                      }}
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-cyan-200" />
+                      <span>Deconstruct Code in Studio</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
