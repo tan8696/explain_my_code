@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Menu, X, Code2 } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 
 const NAV_LINKS = [
   { href: '#features', label: 'Features' },
@@ -82,17 +83,7 @@ export function MobileNav() {
                 className="flex items-center gap-2.5"
                 onClick={() => setIsOpen(false)}
               >
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center shadow-md"
-                  style={{
-                    background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)',
-                  }}
-                >
-                  <Code2 className="w-4 h-4 text-black" />
-                </div>
-                <span className="font-semibold text-base tracking-tight text-white">
-                  Explain My Code
-                </span>
+                <BrandLogo size={28} withText badge="" />
               </Link>
 
               <button

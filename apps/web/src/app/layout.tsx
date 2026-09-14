@@ -41,6 +41,16 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Explain My Code" }],
   creator: "Explain My Code",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '192x192' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -49,12 +59,21 @@ export const metadata: Metadata = {
     description:
       "Instant line-by-line breakdowns, narrative logic, and bug detection for any programming language with zero jargon.",
     siteName: "Explain My Code",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Explain My Code Logo & Preview",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Explain My Code — Understand Any Code in Plain English",
     description:
       "Instant line-by-line breakdowns, narrative logic, and bug detection for any programming language with zero jargon.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,

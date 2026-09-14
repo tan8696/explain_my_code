@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  Code2,
   ArrowLeft,
   Terminal,
   Sparkles,
@@ -20,6 +19,8 @@ import {
   CheckCircle2,
   AlertTriangle,
 } from 'lucide-react';
+
+import { BrandLogo } from '@/components/BrandLogo';
 
 interface TerminalLog {
   id: string;
@@ -200,21 +201,7 @@ export default function NotFound() {
         style={{ borderBottom: '1px solid var(--border-subtle)' }}
       >
         <Link href="/" className="flex items-center gap-3 no-underline group">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm transition-transform group-hover:scale-105"
-            style={{ background: '#ffffff' }}
-          >
-            <Code2 className="w-4 h-4 text-black" />
-          </div>
-          <div className="flex items-center gap-2">
-            <span
-              className="font-semibold text-base tracking-tight"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              Explain My Code
-            </span>
-            <span className="badge badge-info text-[10px] py-0.5 px-2">v2.0</span>
-          </div>
+          <BrandLogo size={32} withText badge="v2.0" />
         </Link>
 
         <div className="flex items-center gap-3">
@@ -677,7 +664,10 @@ export default function NotFound() {
           borderTop: '1px solid var(--border-subtle)',
         }}
       >
-        <span>Explain My Code · Universal Plain-English Code Tutor</span>
+        <div className="flex items-center gap-2">
+          <BrandLogo size={18} />
+          <span>Explain My Code · Universal Plain-English Code Tutor</span>
+        </div>
         <div className="flex items-center gap-3">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>
           <span>·</span>

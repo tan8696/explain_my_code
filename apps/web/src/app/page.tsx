@@ -32,6 +32,7 @@ import { HistorySidebar } from '@/components/HistorySidebar';
 import { useExplanationHistory, HistoryEntry } from '@/hooks/useExplanationHistory';
 
 import { detectLanguage, getPresetExplanation, heuristicAnalysis } from '@/lib/ai-engine';
+import { BrandLogo } from '@/components/BrandLogo';
 
 const getApiBaseUrl = () => {
   const envUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -518,23 +519,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center shadow-md transition-transform group-hover:scale-105"
-                style={{
-                  background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)',
-                }}
-              >
-                <Code2 className="w-4 h-4 text-black" />
-              </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className="font-semibold text-base tracking-tight"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  Explain My Code
-                </span>
-                <span className="badge badge-info text-[10px] py-0.5 px-2">v2.0</span>
-              </div>
+              <BrandLogo size={32} withText badge="v2.0" />
             </Link>
           </div>
 
@@ -1195,9 +1180,9 @@ export default function Home() {
           borderColor: 'var(--border-subtle)',
         }}
       >
-        <div className="flex items-center gap-2">
-          <Code2 className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />
-          <span>© {new Date().getFullYear()} Explain My Code · Built with Next.js 16, FastAPI & Gemini 2.5 Flash</span>
+        <div className="flex items-center gap-2.5">
+          <BrandLogo size={20} />
+          <span>© {new Date().getFullYear()} Explain My Code · Built with Next.js 16 & Gemini 2.5 Flash</span>
         </div>
 
         <div className="flex items-center gap-4 flex-wrap justify-center">

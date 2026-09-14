@@ -8,10 +8,11 @@ import {
   CheckCircle2,
   Scale,
   ArrowLeft,
-  Code2,
+  FileCheck2,
   Shield,
   Zap,
 } from 'lucide-react';
+import { BrandLogo } from '@/components/BrandLogo';
 
 export default function TermsPage() {
   return (
@@ -22,21 +23,7 @@ export default function TermsPage() {
         style={{ borderBottom: '1px solid var(--border-subtle)' }}
       >
         <Link href="/" className="flex items-center gap-3 no-underline">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm"
-            style={{ background: '#ffffff' }}
-          >
-            <Code2 className="w-4 h-4 text-black" />
-          </div>
-          <div className="flex items-center gap-2">
-            <span
-              className="font-semibold text-base tracking-tight"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              Explain My Code
-            </span>
-            <span className="badge badge-info text-[10px] py-0.5 px-2">v2.0</span>
-          </div>
+          <BrandLogo size={32} withText badge="v2.0" />
         </Link>
 
         <Link
@@ -162,7 +149,10 @@ export default function TermsPage() {
           borderTop: '1px solid var(--border-subtle)',
         }}
       >
-        <span>Explain My Code · Plain-English Code Tutor</span>
+        <div className="flex items-center gap-2">
+          <BrandLogo size={18} />
+          <span>Explain My Code · Plain-English Code Tutor</span>
+        </div>
         <div className="flex items-center gap-3">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>
           <span>·</span>
