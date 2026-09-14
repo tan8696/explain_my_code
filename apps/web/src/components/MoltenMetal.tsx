@@ -204,6 +204,8 @@ export const MoltenMetal: React.FC<MoltenMetalProps> = ({
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.style.display = 'block';
+    canvas.style.position = 'absolute';
+    canvas.style.inset = '0';
     container.appendChild(canvas);
 
     const geometry = new Triangle(gl);

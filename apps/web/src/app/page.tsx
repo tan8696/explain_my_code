@@ -28,12 +28,7 @@ import { ScrollReveal } from '@/components/ScrollReveal';
 
 const MoltenMetal = dynamic(() => import('@/components/MoltenMetal'), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full min-h-[500px] flex items-center justify-center bg-[#070913] text-cyan-400/70 font-mono text-xs">
-      <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping mr-2.5" />
-      Initializing WebGL caustics…
-    </div>
-  ),
+  loading: () => <div className="w-full h-full bg-transparent" />,
 });
 
 const METAL_PRESETS = [
