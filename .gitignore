@@ -1,0 +1,52 @@
+# ── Dependencies ─────────────────────────────────────────────────────────────
+node_modules/
+/apps/web/node_modules/
+.pnp
+.pnp.*
+
+# ── Environment & Secret Keys (CRITICAL: Never commit secrets) ──────────────
+.env
+.env.*
+.env*.local
+*.env
+*.pem
+*.key
+*.cert
+credentials.json
+secrets/
+!**/.env.example
+
+# ── Production & Build Artifacts ─────────────────────────────────────────────
+.next/
+/apps/web/.next/
+out/
+build/
+dist/
+coverage/
+.vercel
+
+# ── Python & API ─────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/
+apps/api/data/*.json
+!apps/api/data/.gitkeep
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── TypeScript & Debugging ───────────────────────────────────────────────────
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ── OS & IDE ─────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.agents/skills/

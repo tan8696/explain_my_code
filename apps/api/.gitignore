@@ -1,0 +1,21 @@
+# Environment & Secret Keys
+.env
+.env.*
+.env*.local
+*.env
+*.pem
+*.key
+!**/.env.example
+
+# Python cache & venv
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/
+
+# Dynamic usage files
+data/*.json
+!data/.gitkeep
