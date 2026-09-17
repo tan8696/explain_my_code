@@ -49,10 +49,11 @@ export async function POST(req: NextRequest) {
         'Cache-Control': 'no-store, max-age=0',
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in /v1/explain route handler:', error);
+    const message = error instanceof Error ? error.message : 'Failed to generate code explanation.';
     return NextResponse.json(
-      { detail: error?.message || 'Failed to generate code explanation.' },
+      { detail: message },
       { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } }
     );
   }

@@ -10,11 +10,8 @@ import {
   Bug,
   Lightbulb,
   ShieldCheck,
-  Zap,
   ArrowRight,
-  Terminal,
   CheckCircle2,
-  Lock,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';

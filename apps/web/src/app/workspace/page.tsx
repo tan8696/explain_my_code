@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import Link from 'next/link';
 import {
   Sparkles,
   Zap,
@@ -10,9 +9,6 @@ import {
   History as HistoryIcon,
   Flame,
   Share2,
-  Code2,
-  Terminal,
-  FileCode2,
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -391,7 +387,7 @@ export default function WorkspacePage() {
             block: 'start',
           });
         }, 100);
-      } catch (fallbackErr) {
+      } catch {
         const message =
           err instanceof Error
             ? err.message

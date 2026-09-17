@@ -2,18 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import {
-  Sparkles,
-  ArrowRight,
-  Shield,
-  Zap,
-  Code2,
-  Workflow,
-  Cpu,
-  Layers,
-  FileCheck2,
-  Terminal,
-} from 'lucide-react';
+import { ArrowRight, Workflow, Cpu } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 

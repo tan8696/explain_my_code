@@ -2,15 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import {
-  HelpCircle,
-  ChevronDown,
-  Search,
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
-  Code2,
-} from 'lucide-react';
+import { HelpCircle, ChevronDown, Search, ArrowRight } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 

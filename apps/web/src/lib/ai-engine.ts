@@ -264,9 +264,9 @@ export async function explainCode(code: string): Promise<ExplanationData> {
     const creditInfo = creditManager.recordUsage();
     parsed.credits = creditInfo;
     return parsed;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Fall back safely to the rich heuristic engine
-    const errStr = error?.message || String(error);
+    const errStr = error instanceof Error ? error.message : String(error);
     const res = heuristicAnalysis(trimmed);
     const info = creditManager.getCreditInfo();
     info.mode = 'offline_heuristic';
@@ -319,7 +319,8 @@ export function detectLanguage(code: string): string {
 
 /* ── Preset Explanations Library ────────────────────────────────────── */
 
-export function getPresetExplanation(code: string, lang: string): ExplanationData | null {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function getPresetExplanation(code: string, _lang?: string): ExplanationData | null {
   // Preset 1: Python Greeting
   if (code.includes('def greet(') && code.includes('Alice')) {
     return {
@@ -1285,6 +1286,12 @@ export function heuristicAnalysis(code: string): ExplanationData {
     concepts.push({
       name: 'Loops & Iteration',
       explanation: 'Repeating code over sequences, collections, or until a sentinel state is reached.',
+    });
+  }
+  if (hasVariables) {
+    concepts.push({
+      name: 'State & Variable Assignment',
+      explanation: 'Allocating named memory locations to store and manipulate data throughout program execution.',
     });
   }
   if (concepts.length === 0) {

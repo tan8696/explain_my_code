@@ -225,27 +225,27 @@ export const GradientWaves: React.FC<GradientWavesProps> = ({
       uniforms: {
         iTime: { value: 0 },
         iResolution: { value: new Float32Array([1, 1]) },
-        uSpeed: { value: 0.4 },
-        uAmplitude: { value: 2.5 },
-        uWaveScale: { value: 0.6 },
-        uWaveRatio: { value: 0.9 },
-        uSwell: { value: 35 },
-        uTurbulence: { value: 20 },
-        uTilt: { value: 1.11 },
-        uZoom: { value: 1.0 },
-        uHeight: { value: 5.5 },
-        uFogDepth: { value: 15 },
-        uSteps: { value: 70.0 },
-        uBrightness: { value: 1.0 },
-        uOpacity: { value: 1.0 },
-        uGrain: { value: 1.0 },
-        uGrainIntensity: { value: 0.05 },
+        uSpeed: { value: speed },
+        uAmplitude: { value: amplitude },
+        uWaveScale: { value: waveScale },
+        uWaveRatio: { value: waveRatio },
+        uSwell: { value: swell },
+        uTurbulence: { value: turbulence },
+        uTilt: { value: tilt },
+        uZoom: { value: zoom },
+        uHeight: { value: height },
+        uFogDepth: { value: fogDepth },
+        uSteps: { value: detailToSteps(detail) },
+        uBrightness: { value: brightness },
+        uOpacity: { value: opacity },
+        uGrain: { value: grain ? 1.0 : 0.0 },
+        uGrainIntensity: { value: grainIntensity },
         uMouse: { value: new Float32Array([0.5, 0.5]) },
-        uParallax: { value: 0.5 },
-        uEnableMouse: { value: true },
-        uHorizonColor: { value: new Float32Array([1, 1, 1]) },
-        uWaveColor: { value: new Float32Array([1, 1, 1]) },
-        uCrestColor: { value: new Float32Array([1, 1, 1]) },
+        uParallax: { value: parallaxStrength },
+        uEnableMouse: { value: mouseInteraction },
+        uHorizonColor: { value: new Float32Array(hexToRgb(horizonColor)) },
+        uWaveColor: { value: new Float32Array(hexToRgb(waveColor)) },
+        uCrestColor: { value: new Float32Array(hexToRgb(crestColor)) },
       },
     });
 
@@ -279,8 +279,24 @@ export const GradientWaves: React.FC<GradientWavesProps> = ({
       targetMouse[0] = 0.5;
       targetMouse[1] = 0.5;
     };
+
+    const onWindowMouseMove = (e: MouseEvent) => {
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        targetMouse[0] = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        targetMouse[1] = Math.max(0, Math.min(1, 1.0 - (e.clientY - rect.top) / rect.height));
+      }
+    };
+    const onWindowMouseLeave = () => {
+      targetMouse[0] = 0.5;
+      targetMouse[1] = 0.5;
+    };
+
     canvas.addEventListener('pointermove', onPointerMove);
     canvas.addEventListener('pointerleave', onPointerLeave);
+    window.addEventListener('mousemove', onWindowMouseMove, { passive: true });
+    window.addEventListener('mouseleave', onWindowMouseLeave, { passive: true });
 
     let raf = 0;
     let isVisible = true;
@@ -341,12 +357,15 @@ export const GradientWaves: React.FC<GradientWavesProps> = ({
       document.removeEventListener('visibilitychange', onVisibility);
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerleave', onPointerLeave);
+      window.removeEventListener('mousemove', onWindowMouseMove);
+      window.removeEventListener('mouseleave', onWindowMouseLeave);
       ctxMap.delete(container);
-      try {
+      if (canvas.parentNode === container) {
         container.removeChild(canvas);
-      } catch {}
+      }
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

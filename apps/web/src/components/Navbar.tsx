@@ -21,14 +21,10 @@ export function Navbar({
   isResettingCredits,
 }: NavbarProps) {
   const pathname = usePathname();
-  const [credits, setCredits] = useState<CreditInfo | null>(propCredits || null);
+  const [internalCredits, setInternalCredits] = useState<CreditInfo | null>(null);
   const [internalResetting, setInternalResetting] = useState(false);
 
-  useEffect(() => {
-    if (propCredits !== undefined) {
-      setCredits(propCredits);
-    }
-  }, [propCredits]);
+  const credits = propCredits !== undefined ? propCredits : internalCredits;
 
   useEffect(() => {
     // If not passed as props, fetch usage independently
@@ -39,7 +35,7 @@ export function Navbar({
           const res = await fetch('/v1/usage');
           if (res.ok && active) {
             const data: CreditInfo = await res.json();
-            setCredits(data);
+            setInternalCredits(data);
           }
         } catch {
           // ignore offline
@@ -62,7 +58,7 @@ export function Navbar({
       const res = await fetch('/v1/usage/reset', { method: 'POST' });
       if (res.ok) {
         const data: CreditInfo = await res.json();
-        setCredits(data);
+        setInternalCredits(data);
       }
     } catch (e) {
       console.error(e);

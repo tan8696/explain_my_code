@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   Scale,
   ArrowLeft,
-  FileCheck2,
   Shield,
   Zap,
 } from 'lucide-react';
