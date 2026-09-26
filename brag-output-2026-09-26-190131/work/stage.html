@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="inter_a594d4de-module__Mkkauq__variable geist_mono_1bf8cbf6-module__FlyLvG__variable dark" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<!-- The app's own compiled stylesheet (Tailwind + globals + next/font), served by `next start` -->
+<link rel="stylesheet" href="/_next/static/chunks/058hdvrvzxt_2.css">
+<style>
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0c0418; }
+  body::before { display: none; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background: radial-gradient(ellipse 90% 80% at 30% 40%, #150a2a 0%, #0c0418 55%, #08030f 100%); }
+  .scene { position: absolute; inset: 0; display: none; }
+  iframe { border: 0; display: block; background: transparent; }
+
+  /* Deck chrome */
+  #label { position: absolute; left: 120px; top: 84px; font-family: var(--font-mono); font-size: 25px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; color: #38bdf8; white-space: nowrap; }
+  #label .dash { color: rgba(56,189,248,0.55); margin: 0 0.35em; }
+  #foot { position: absolute; left: 120px; right: 120px; bottom: 64px; display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--font-sans); color: rgba(232,234,240,0.72); }
+  #foot .brand { display: flex; align-items: center; gap: 14px; font-weight: 600; font-size: 24px; letter-spacing: -0.01em; }
+  #foot .brand img { width: 38px; height: 38px; border-radius: 50%; box-shadow: 0 0 14px rgba(56,189,248,0.35), 0 0 26px rgba(167,139,250,0.2); }
+  #foot .page { font-family: var(--font-mono); font-size: 22px; letter-spacing: 0.08em; color: rgba(232,234,240,0.5); }
+  #footScrim { position: absolute; left: 0; right: 0; bottom: 0; height: 165px; background: linear-gradient(to top, rgba(8,3,15,0.85), rgba(8,3,15,0)); visibility: hidden; }
+
+  .grad { background-image: linear-gradient(135deg, #38bdf8 0%, #a78bfa 50%, #f472b6 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stmt { position: absolute; left: 120px; font-family: var(--font-sans); font-weight: 800; color: #fff; letter-spacing: -0.04em; transform-origin: 0 50%; }
+
+  /* 01 */
+  #s1 .stmt { top: 330px; font-size: 172px; line-height: 1.04; }
+  #s1 .mono { font-family: var(--font-mono); font-weight: 600; letter-spacing: -0.02em; }
+  #caret { display: inline-block; width: 0.09em; height: 0.8em; margin-left: 0.04em; vertical-align: -0.04em; background: #38bdf8; box-shadow: 0 0 18px rgba(56,189,248,0.8); }
+
+  /* 02 */
+  #landing { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transform-origin: 0 0; }
+
+  /* 03 / 04 */
+  .title { position: absolute; left: 120px; top: 148px; font-family: var(--font-sans); font-weight: 800; font-size: 84px; letter-spacing: -0.035em; color: #fff; white-space: nowrap; }
+  #win { position: absolute; left: 120px; top: 300px; width: 1680px; height: 650px; border-radius: 18px; overflow: hidden; background: #06060c; visibility: hidden;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 30px 90px rgba(0,0,0,0.6), 0 0 120px rgba(82,39,255,0.18); }
+  #cam { position: absolute; left: 0; top: 0; width: 1280px; height: 760px; transform-origin: 0 0; }
+  #cam iframe { position: absolute; left: 0; top: 0; width: 1280px; height: 760px; visibility: hidden; }
+
+  /* 05 */
+  .num { position: absolute; left: 112px; top: 250px; font-family: var(--font-mono); font-weight: 700; font-size: 330px; line-height: 1; letter-spacing: -0.03em; transform-origin: 0 50%; visibility: hidden; }
+  .numlab { position: absolute; left: 124px; top: 640px; font-family: var(--font-sans); font-weight: 600; font-size: 66px; letter-spacing: -0.02em; color: rgba(232,234,240,0.78); visibility: hidden; }
+
+  /* 06 */
+  #s6 .stmt { top: 250px; font-size: 176px; line-height: 1; }
+  #url { position: absolute; left: 120px; top: 520px; display: inline-flex; align-items: center; gap: 18px; padding: 26px 50px; border-radius: 24px;
+    background: #fff; color: #09090b; font-family: var(--font-sans); font-weight: 700; font-size: 48px; letter-spacing: -0.015em;
+    box-shadow: 0 0 60px rgba(56,189,248,0.45), 0 4px 14px rgba(0,0,0,0.5); transform-origin: 0 50%; }
+  #url svg { width: 42px; height: 42px; }
+  #fine { position: absolute; left: 124px; top: 700px; font-family: var(--font-sans); font-weight: 500; font-size: 42px; color: rgba(232,234,240,0.72); letter-spacing: -0.01em; }
+
+  #ripple { position: absolute; left: 0; top: 0; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.9); box-shadow: 0 0 24px rgba(56,189,248,0.7); opacity: 0; pointer-events: none; }
+  #cursor { position: absolute; left: 0; top: 0; width: 34px; height: 46px; transform-origin: 3px 3px; opacity: 0; pointer-events: none; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.55)); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="scene" id="s1">
+    <div class="stmt">Code is written<br>in <span class="mono grad" id="typed"></span><span id="period"></span><span id="caret"></span></div>
+  </div>
+
+  <div class="scene" id="s2">
+    <iframe id="landing" src="snaps/L-landing.html"></iframe>
+  </div>
+
+  <div class="scene" id="s3"><div class="title">It explains <span class="grad">every line</span>.</div></div>
+  <div class="scene" id="s4"><div class="title">It also tells you <span class="grad">why it crashed</span>.</div></div>
+  <div id="win"><div id="cam">
+    <iframe data-state="B" src="snaps/B-division.html"></iframe>
+    <iframe data-state="D" src="snaps/D-summary.html"></iframe>
+    <iframe data-state="E" src="snaps/E-lines.html"></iframe>
+    <iframe data-state="F" src="snaps/F-bugs.html"></iframe>
+  </div></div>
+
+  <div class="scene" id="s5">
+    <div class="num" style="color:#ffffff">25+</div><div class="numlab">Languages Supported</div>
+    <div class="num" style="color:#34d399">&lt; 1.5s</div><div class="numlab">Response Speed</div>
+    <div class="num" style="color:#22d3ee">50 / day</div><div class="numlab">Free Tier Quota</div>
+    <div class="num" style="color:#f0abfc">0 KB</div><div class="numlab">Zero Code Retained</div>
+  </div>
+
+  <div class="scene" id="s6">
+    <div class="stmt">Paste your <span class="grad">code</span>.</div>
+    <div id="url">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
+      <span>explainmycode.dev</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </div>
+    <div id="fine">Free forever tier. No login required.</div>
+  </div>
+
+  <div id="footScrim"></div>
+  <div id="label"></div>
+  <div id="foot"><div class="brand"><img src="/logo.png" alt=""><span>Explain My Code</span></div><div class="page" id="page"></div></div>
+
+  <div id="ripple"></div>
+  <svg id="cursor" viewBox="0 0 34 46"><path d="M3 3 L3 37 L11.5 29 L17 42 L23 39.5 L17.6 27 L29 27 Z" fill="#fff" stroke="#0b0b12" stroke-width="2.4" stroke-linejoin="round"/></svg>
+</div>
+<script src="waves-shader.js"></script>
+<script src="stage.js"></script>
+</body>
+</html>

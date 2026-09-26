@@ -1,0 +1,1 @@
+The problem: code is written in code. Explain My Code turns it into Simple English, line by line, and tells you why it crashed (0 KB of your code retained). The ask: paste your code at explainmycode.dev.
