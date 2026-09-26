@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="inter_a594d4de-module__Mkkauq__variable geist_mono_1bf8cbf6-module__FlyLvG__variable dark" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<!-- The app's own compiled stylesheet (Tailwind + globals + next/font), served by `next start` -->
+<link rel="stylesheet" href="/_next/static/chunks/058hdvrvzxt_2.css">
+<style>
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0c0418; }
+  body::before { display: none; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0c0418; }
+  iframe { border: 0; display: block; background: transparent; }
+  #landing { position: absolute; left: 0; top: 0; width: 1280px; height: 720px; transform-origin: 0 0; }
+  #dim { position: absolute; inset: 0; background: #0c0418; opacity: 0; pointer-events: none; }
+  #win {
+    position: absolute; left: 0; top: 0; width: 1280px; height: 760px; transform-origin: 0 0;
+    border-radius: 14px; overflow: hidden; background: #06060c; opacity: 0;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.09), 0 30px 90px rgba(0,0,0,0.65), 0 0 120px rgba(82,39,255,0.25);
+  }
+  #win iframe { position: absolute; left: 0; top: 0; width: 1280px; height: 760px; visibility: hidden; }
+
+  .cap {
+    position: absolute; left: 50%; top: 58px; transform: translateX(-50%);
+    padding: 18px 40px 20px; border-radius: 999px; white-space: nowrap;
+    font-family: var(--font-sans); font-weight: 700; font-size: 50px; letter-spacing: -0.02em; color: #fff;
+    background: rgba(12, 8, 26, 0.8); border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35); opacity: 0;
+  }
+  .grad {
+    background-image: linear-gradient(135deg, #38bdf8 0%, #a78bfa 50%, #f472b6 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  #outro { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+  #outro .scrim { position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(12,4,24,0.72) 0%, rgba(12,4,24,0.35) 55%, rgba(12,4,24,0) 100%); opacity: 0; }
+  #outro .o { position: relative; opacity: 0; }
+  #o-logo { width: 188px; height: 188px; border-radius: 50%; box-shadow: 0 0 40px rgba(56,189,248,0.45), 0 0 90px rgba(167,139,250,0.35); }
+  #o-name { margin-top: 34px; font-family: var(--font-sans); font-weight: 800; font-size: 112px; letter-spacing: -0.035em; line-height: 1; color: #fff; }
+  #o-tag { margin-top: 26px; font-family: var(--font-sans); font-weight: 500; font-size: 40px; color: #d6d8e6; letter-spacing: -0.01em; }
+  #o-url {
+    margin-top: 44px; display: inline-flex; align-items: center; gap: 16px; padding: 22px 44px; border-radius: 22px;
+    background: #fff; color: #09090b; font-family: var(--font-sans); font-weight: 700; font-size: 40px; letter-spacing: -0.01em;
+    box-shadow: 0 0 50px rgba(56,189,248,0.45), 0 4px 14px rgba(0,0,0,0.5);
+  }
+  #o-url svg { width: 36px; height: 36px; }
+
+  #ripple { position: absolute; left: 0; top: 0; width: 80px; height: 80px; margin: -40px 0 0 -40px; border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.9); box-shadow: 0 0 24px rgba(56,189,248,0.7); opacity: 0; pointer-events: none; }
+  #cursor { position: absolute; left: 0; top: 0; width: 34px; height: 46px; transform-origin: 3px 3px; opacity: 0; pointer-events: none;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.55)); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <iframe id="landing" src="snaps/L-landing.html"></iframe>
+  <div id="dim"></div>
+  <div id="win">
+    <iframe data-state="A" src="snaps/A-initial.html"></iframe>
+    <iframe data-state="B" src="snaps/B-division.html"></iframe>
+    <iframe data-state="C" src="snaps/C-loading.html"></iframe>
+    <iframe data-state="D" src="snaps/D-summary.html"></iframe>
+    <iframe data-state="E" src="snaps/E-lines.html"></iframe>
+    <iframe data-state="F" src="snaps/F-bugs.html"></iframe>
+  </div>
+
+  <div class="cap" id="cap1">Paste any code. Hit <span class="grad">Explain</span>.</div>
+  <div class="cap" id="cap2">Every line, in <span class="grad">Simple English</span>.</div>
+  <div class="cap" id="cap3">Finds the bug. Hands you <span class="grad">the fix</span>.</div>
+
+  <div id="outro">
+    <div class="scrim"></div>
+    <img class="o" id="o-logo" src="/logo.png" alt="">
+    <div class="o" id="o-name">Explain My Code</div>
+    <div class="o" id="o-tag">Free forever tier. No login required.</div>
+    <div class="o" id="o-url">
+      <!-- lucide Sparkles, as used on the real "Launch Studio Free" button -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/></svg>
+      <span>explainmycode.dev</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#09090b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </div>
+  </div>
+
+  <div id="ripple"></div>
+  <svg id="cursor" viewBox="0 0 34 46"><path d="M3 3 L3 37 L11.5 29 L17 42 L23 39.5 L17.6 27 L29 27 Z" fill="#fff" stroke="#0b0b12" stroke-width="2.4" stroke-linejoin="round"/></svg>
+</div>
+<script src="waves-shader.js"></script>
+<script src="stage.js"></script>
+</body>
+</html>

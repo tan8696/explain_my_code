@@ -1,0 +1,10 @@
+# Heavy / regenerable intermediates from the /brag render (scripts in work/ are kept)
+work/node_modules/
+work/package-lock.json
+work/snaps/
+work/stills/
+work/vcheck/
+work/stems/
+work/*.mp4
+work/*.wav
+work/*.log
